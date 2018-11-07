@@ -1,0 +1,20 @@
+{
+  "name": "--yes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "--yes",
+  "dependencies": {
+    "express": "^4.15.2",
+    "httpdispatcher": "^2.0.1",
+    "moment": "^2.22.0",
+    "mongodb": "^2.2.25",
+    "nodemailer": "^3.1.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "MAILERPASSWORD='password' node myFirstHTTPserver.js",
+    "test": "--yes"
+  },
+  "author": "",
+  "license": "ISC"
+}

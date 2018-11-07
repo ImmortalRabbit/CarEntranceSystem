@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="scripts/moment.js"></script>
+        <script src="scripts/jquery-3.3.1.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    </head>
+    <body>
+
+        <div id="elements" class="container-fluid">
+            <ul class="list row">
+                <li><span class="col-4">EMAIL</span><span class="col-4">CAR DETAILS</span><span class="col-4">ALLOW NOT ALLOW</span></li><br>
+            </ul>
+        </div>
+        
+    </body>
+    
+    <script>
+
+        function sendPost() {
+
+            var data = {"time": moment().format()};
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:8001/retrieve',
+                data: {json:JSON.stringify(data)},
+                success: success
+            });
+        }
+
+        function firstRequest() {
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:8001/retrieve',
+                data: {},
+                success: function(test) {handleResponse(test)}
+            });
+        }
+
+        $(document).ready(function() {
+            // sendPost();
+            firstRequest();
+        })
+
+        function handleResponse(data) {
+            console.log(data);
+            data = JSON.parse(data);
+            var length = data.length;
+            console.log(data[0].email);
+            for(i = 0; i<length; i++) {
+                $("#elements ul").append('<li><span class="col-4">'+data[i].email+'</span><span class="col-4">' + data[i].car_num + '</span><span class="col-4"><button class="btn btn-success" onclick="allow(&quot;'+ data[i]._id +'&quot;)">Allow</button> <button class="btn btn-danger" onclick="reject(&quot;'+ data[i]._id +'&quot;)">Reject</button> </span></li><br>');
+            }
+        }
+
+        function allow(id) {
+
+            var data = {"allow": true, "id": id};
+
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:8001/decide',
+                data: {json:JSON.stringify(data)},
+                success: function(){location.reload()}
+            });
+
+            // alert("Allowing "+id);
+        }
+
+        function reject(id) {
+
+            var data = {"allow": false, "id": id};
+            
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:8001/decide',
+                data: {json:JSON.stringify(data)},
+                success: function(){location.reload()}
+            });
+
+
+            // alert("Rejecting " + id);
+        }
+
+        // sendPost();
+
+        /*
+        $.ajax({
+                type: "POST",
+                url: 'http://localhost:8001/decide',
+                data: {json:JSON.stringify(data)},
+                success: function(test) {handleResponse(test)}
+            });
+            alert("Allowing " + id);
+        */
+
+    </script>
+    
+</html>
